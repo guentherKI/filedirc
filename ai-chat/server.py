@@ -1,22 +1,3 @@
-from flask import Flask, request, jsonify
-from flask_cors import CORS
-from gpt_model import GPTModel
-from tokenizer import BPETokenizer
-import json
-import time
-import os
-import re
-
-app = Flask(__name__)
-CORS(app)
-
-# ----------------------------------------------------------------------
-# Load the pre-trained model (once)
-# ----------------------------------------------------------------------
-print("=" * 70)
-print("🧠 GPT CHAT SERVER - Transformer Architecture + BPE")
-print("=" * 70)
-
 # 1. Load Tokenizer
 tokenizer = BPETokenizer(vocab_size=1000)
 if os.path.exists('tokenizer.json'):
