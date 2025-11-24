@@ -51,12 +51,12 @@ class BackgroundTrainer:
                 
                 # Log progress
                 if self.current_epoch % 100 == 0:
-                    print(f"[Background] Epoch {self.current_epoch}/{self.target_epochs} | Loss: {loss:.4f}")
+                    print(f"[Background] Epoch {self.current_epoch}/{self.target_epochs} | Loss: {loss:.4f}", flush=True)
                 
                 # Save periodically (every 500 epochs or 5 minutes)
                 if self.current_epoch % 500 == 0:
                     self.gpt.save(self.save_path)
-                    print(f"💾 [Background] Model saved at epoch {self.current_epoch}")
+                    print(f"💾 [Background] Model saved at epoch {self.current_epoch}", flush=True)
                     
                 # Small sleep to prevent CPU hogging on shared hosting
                 time.sleep(0.01) 

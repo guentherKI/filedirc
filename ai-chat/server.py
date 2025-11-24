@@ -16,14 +16,16 @@ CORS(app)
 # ----------------------------------------------------------------------
 # Serve Frontend
 # ----------------------------------------------------------------------
+BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+
 @app.route('/')
 def home():
-    return send_from_directory('.', 'index.html')
+    return send_from_directory(BASE_DIR, 'index.html')
 
 @app.route('/<path:path>')
 def serve_static(path):
     if path in ['style.css', 'app.js', 'manifest.json']:
-        return send_from_directory('.', path)
+        return send_from_directory(BASE_DIR, path)
     return jsonify({"error": "File not found"}), 404
 
 # ----------------------------------------------------------------------
