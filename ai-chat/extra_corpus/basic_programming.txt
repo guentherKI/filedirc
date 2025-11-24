@@ -1,0 +1,62 @@
+# Basic programming concepts and examples in Python
+
+# Variables and data types
+x = 10               # integer
+pi = 3.1415           # float
+name = "Alice"       # string
+is_ready = True      # boolean
+
+# Simple arithmetic
+sum_val = x + 5
+product = x * 2
+quotient = x / 3
+remainder = x % 3
+
+# Conditional statements
+if x > 5:
+    print("x is greater than 5")
+else:
+    print("x is 5 or less")
+
+# Loops
+# For loop over a range
+for i in range(5):
+    print("Iteration", i)
+
+# While loop
+counter = 0
+while counter < 3:
+    print("Counter", counter)
+    counter += 1
+
+# Functions
+
+def greet(person):
+    """Return a greeting string for the given person."""
+    return f"Hello, {person}!"
+
+message = greet(name)
+print(message)
+
+# Lists and basic list operations
+fruits = ["apple", "banana", "cherry"]
+fruits.append("date")
+first_fruit = fruits[0]
+print("First fruit:", first_fruit)
+
+# Dictionaries
+person_info = {"name": "Bob", "age": 30, "city": "Paris"}
+print("Name:", person_info["name"]) 
+
+# Simple class definition
+class Animal:
+    def __init__(self, species, sound):
+        self.species = species
+        self.sound = sound
+    def speak(self):
+        return f"The {self.species} says {self.sound}"
+
+cat = Animal("cat", "meow")
+print(cat.speak())
+
+# Comments explain each block of code and help beginners understand the flow.

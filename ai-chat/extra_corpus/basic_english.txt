@@ -1,0 +1,48 @@
+Simple English sentences for basic language learning.
+
+# Greetings and introductions
+Hello! My name is Alex. Nice to meet you.
+Good morning. How are you today?
+Good evening. Have a nice night.
+
+# Everyday phrases
+Thank you very much. You're welcome.
+Please, could you help me? I need some assistance.
+I'm sorry. I didn't understand.
+Excuse me, where is the restroom?
+
+# Common questions and answers
+What is your name? My name is Sam.
+How old are you? I am twenty five years old.
+Where do you live? I live in Berlin.
+What do you do? I work as a teacher.
+
+# Simple instructions
+Open the door. Close the window.
+Turn on the light. Turn off the computer.
+
+# Numbers and counting
+One, two, three, four, five.
+Ten, twenty, thirty, forty, fifty.
+Hundred, thousand, million.
+
+# Colors and objects
+Red apple, blue sky, green grass.
+The cat is on the table.
+The book is on the shelf.
+
+# Time expressions
+Today, tomorrow, yesterday.
+Morning, afternoon, night.
+It is five o'clock.
+
+# Basic adjectives
+big, small, tall, short, fast, slow.
+happy, sad, angry, excited.
+
+# Simple dialogues
+A: Hi, how are you?
+B: I'm fine, thank you. And you?
+A: I'm good, thanks.
+
+These sentences cover fundamental English vocabulary and structures that are easy for a language model to learn and generate coherent, simple responses.

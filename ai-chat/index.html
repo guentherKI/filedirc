@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeuralChat - Custom AI Chat</title>
+    <meta name="description" content="Chat with a custom AI built from scratch - no libraries required!">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-content">
+            <div class="brain-animation">
+                <i class="fas fa-brain"></i>
+                <div class="pulse-ring"></div>
+                <div class="pulse-ring delay-1"></div>
+                <div class="pulse-ring delay-2"></div>
+            </div>
+            <h1>NeuralChat</h1>
+            <p class="loading-text" id="loadingText">Building AI from scratch...</p>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <p class="loading-info">Pure JavaScript - No libraries, no imports! 🧠</p>
+        </div>
+    </div>
+
+    <!-- Main Chat Interface -->
+    <div class="chat-container" id="chatContainer">
+        <!-- Header -->
+        <header class="chat-header">
+            <div class="header-left">
+                <div class="ai-avatar">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <div class="ai-info">
+                    <h1>NeuralChat</h1>
+                    <p class="status">
+                        <span class="status-indicator"></span>
+                        <span id="statusText">AI Ready</span>
+                    </p>
+                </div>
+            </div>
+            <div class="header-right">
+                <button class="icon-btn" id="settingsBtn" title="Settings">
+                    <i class="fas fa-cog"></i>
+                </button>
+                <button class="icon-btn" id="clearBtn" title="Clear Chat">
+                    <i class="fas fa-trash"></i>
+                </button>
+                <button class="icon-btn" id="themeBtn" title="Toggle Theme">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Messages Area -->
+        <div class="messages-container" id="messagesContainer">
+            <div class="welcome-message">
+                <div class="welcome-icon">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <h2>Welcome to NeuralChat! 🤖</h2>
+                <p>I'm a custom AI built from scratch - no external libraries!</p>
+                <p class="welcome-info">
+                    <i class="fas fa-check-circle"></i> Pure JavaScript neural network<br>
+                    <i class="fas fa-check-circle"></i> Pattern learning & recognition<br>
+                    <i class="fas fa-check-circle"></i> Built 100% from scratch!
+                </p>
+                <div class="quick-prompts">
+                    <button class="prompt-btn" data-prompt="Hello!">👋 Say hi</button>
+                    <button class="prompt-btn" data-prompt="What are you?">🤖 What are you?</button>
+                    <button class="prompt-btn" data-prompt="Tell me a joke">😄 Tell a joke</button>
+                    <button class="prompt-btn" data-prompt="How do you work?">⚙️ How you work?</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Input Area -->
+        <div class="input-container">
+            <div class="input-wrapper">
+                <button class="icon-btn-small" id="attachBtn" title="Attach">
+                    <i class="fas fa-paperclip"></i>
+                </button>
+                <textarea id="messageInput" placeholder="Type your message..." rows="1" maxlength="500"></textarea>
+                <button class="send-btn" id="sendBtn" title="Send Message">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+            <div class="input-info">
+                <span id="charCount">0 / 500</span>
+                <span class="separator">•</span>
+                <span id="modelInfo">Custom AI (Pure JS)</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
