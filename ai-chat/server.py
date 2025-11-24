@@ -1,3 +1,38 @@
+from flask import Flask, request, jsonify, send_from_directory
+from flask_cors import CORS
+from gpt_model import GPTModel
+from tokenizer import BPETokenizer
+import json
+import time
+import os
+import re
+import signal
+import sys
+from background_trainer import BackgroundTrainer
+
+app = Flask(__name__)
+CORS(app)
+
+# ----------------------------------------------------------------------
+# Serve Frontend
+# ----------------------------------------------------------------------
+@app.route('/')
+def home():
+    return send_from_directory('.', 'index.html')
+
+@app.route('/<path:path>')
+def serve_static(path):
+    if path in ['style.css', 'app.js', 'manifest.json']:
+        return send_from_directory('.', path)
+    return jsonify({"error": "File not found"}), 404
+
+# ----------------------------------------------------------------------
+# Load the pre-trained model (once)
+# ----------------------------------------------------------------------
+print("=" * 70)
+print("🧠 GPT CHAT SERVER - Transformer Architecture + BPE")
+print("=" * 70)
+
 # 1. Load Tokenizer
 tokenizer = BPETokenizer(vocab_size=1000)
 if os.path.exists('tokenizer.json'):
@@ -7,10 +42,6 @@ else:
     print("⚠️ No tokenizer found! Please run pretrain.py first.")
     # Fallback to untrained tokenizer (byte-level)
     tokenizer.vocab_size = 256
-
-from background_trainer import BackgroundTrainer
-
-# ... (Previous imports and setup) ...
 
 # 2. Initialize GPT
 gpt = GPTModel(tokenizer, d_model=64, n_layer=4, n_head=4, block_size=32)
@@ -30,35 +61,10 @@ if os.environ.get('RENDER'):
     print("☁️ Detected Render environment: Starting background training...")
     trainer.start()
 
-# ... (Chat endpoint remains same) ...
-
-@app.route("/status", methods=["GET"])
-def status():
-    """Check training status."""
-    return jsonify({
-        "is_training": trainer.is_training,
-        "current_epoch": trainer.current_epoch,
-        "target_epochs": trainer.target_epochs,
-        "last_loss": trainer.last_loss,
-        "vocab_size": gpt.vocab_size
-    })
-
-@app.route("/start_training", methods=["POST"])
-def start_training():
-    """Manually start background training."""
-    if not trainer.is_training:
-        trainer.start()
-        return jsonify({"status": "started"})
-    return jsonify({"status": "already_running"})
-
-@app.route("/stop_training", methods=["POST"])
-def stop_training():
-    """Manually stop background training."""
-    if trainer.is_training:
-        trainer.stop()
-        return jsonify({"status": "stopped"})
-    return jsonify({"status": "not_running"})
-
+# ----------------------------------------------------------------------
+# Training metadata (persisted between restarts)
+# ----------------------------------------------------------------------
+META_PATH = "training_meta.json"
 try:
     with open(META_PATH, "r", encoding="utf-8") as f:
         training_meta = json.load(f)
@@ -93,12 +99,6 @@ def chat():
         print(f"✨ Generated (full): '{generated}'")
         
         # Post-processing
-        # Remove the seed from the beginning if it's repeated (GPT usually continues, but sometimes repeats)
-        # Actually, my generate function returns the FULL text including seed.
-        # We want to return just the new part or the whole thing? 
-        # Usually chat interfaces want the whole thing or just the response. 
-        # Let's return the whole thing but clean it up.
-        
         response = generated
         
         # Basic cleanup: keep only printable ASCII characters, collapse whitespace
@@ -111,8 +111,32 @@ def chat():
         print(f"❌ Error: {e}")
         return jsonify({"response": "Error generating response", "error": str(e)}), 500
 
-# Old /train endpoint removed in favor of background trainer
+@app.route("/status", methods=["GET"])
+def status():
+    """Check training status."""
+    return jsonify({
+        "is_training": trainer.is_training,
+        "current_epoch": trainer.current_epoch,
+        "target_epochs": trainer.target_epochs,
+        "last_loss": trainer.last_loss,
+        "vocab_size": gpt.vocab_size
+    })
 
+@app.route("/start_training", methods=["POST"])
+def start_training():
+    """Manually start background training."""
+    if not trainer.is_training:
+        trainer.start()
+        return jsonify({"status": "started"})
+    return jsonify({"status": "already_running"})
+
+@app.route("/stop_training", methods=["POST"])
+def stop_training():
+    """Manually stop background training."""
+    if trainer.is_training:
+        trainer.stop()
+        return jsonify({"status": "stopped"})
+    return jsonify({"status": "not_running"})
 
 # ----------------------------------------------------------------------
 # /model_info – expose how many epochs the model has been trained
@@ -149,11 +173,6 @@ def stats():
 def health():
     """Health check."""
     return jsonify({"status": "healthy", "model_loaded": gpt.vocab_size is not None})
-
-import signal
-import sys
-
-# ... (Previous code) ...
 
 def graceful_shutdown(signum, frame):
     print(f"\n🛑 Received signal {signum}. Shutting down gracefully...")
