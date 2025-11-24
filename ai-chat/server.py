@@ -50,11 +50,40 @@ gpt = GPTModel(tokenizer, d_model=64, n_layer=4, n_head=4, block_size=32)
 
 MODEL_FILE = "gpt_model.pkl"
 
-if gpt.load(MODEL_FILE):
-    print(f"✅ Model loaded successfully")
-    print(f"📊 Vocabulary size: {gpt.vocab_size} tokens")
+# Check if we can load the model (vocab must match)
+if os.path.exists(MODEL_FILE):
+    # Peek at the saved vocab size without fully loading
+    import pickle
+    try:
+        with open(MODEL_FILE, 'rb') as f:
+            checkpoint = pickle.load(f)
+        
+        # Check saved vocab size
+        if isinstance(checkpoint, dict) and 'params' in checkpoint:
+            saved_params = checkpoint['params']
+        else:
+            saved_params = checkpoint
+        
+        saved_lm_head = saved_params.get('lm_head_w')
+        if saved_lm_head is not None:
+            saved_vocab_size = saved_lm_head.shape[1]  # (d_model, vocab_size)
+            
+            if saved_vocab_size != tokenizer.vocab_size:
+                print(f"⚠️ Vocab size mismatch! Saved: {saved_vocab_size}, Current: {tokenizer.vocab_size}")
+                print(f"🔄 Starting fresh with new tokenizer...")
+                # Don't load - start from scratch
+            else:
+                if gpt.load(MODEL_FILE):
+                    print(f"✅ Model loaded successfully")
+                    print(f"📊 Vocabulary size: {gpt.vocab_size} tokens")
+                else:
+                    print(f"⚠️ Failed to load {MODEL_FILE}! Starting fresh.")
+        else:
+            print(f"⚠️ Invalid model file. Starting fresh.")
+    except Exception as e:
+        print(f"⚠️ Error checking model: {e}. Starting fresh.")
 else:
-    print(f"⚠️ Failed to load {MODEL_FILE}! Starting fresh.")
+    print(f"ℹ️ No saved model found. Training from scratch.")
 
 # Initialize Background Trainer
 trainer = BackgroundTrainer(gpt, MODEL_FILE)
