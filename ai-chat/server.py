@@ -205,6 +205,20 @@ def health():
     """Health check."""
     return jsonify({"status": "healthy", "model_loaded": gpt.vocab_size is not None})
 
+@app.route("/download_model", methods=["GET"])
+def download_model():
+    """Download the current trained model."""
+    if os.path.exists(MODEL_FILE):
+        return send_from_directory(BASE_DIR, MODEL_FILE, as_attachment=True)
+    return jsonify({"error": "No model file found"}), 404
+
+@app.route("/download_tokenizer", methods=["GET"])
+def download_tokenizer():
+    """Download the tokenizer."""
+    if os.path.exists('tokenizer.json'):
+        return send_from_directory(BASE_DIR, 'tokenizer.json', as_attachment=True)
+    return jsonify({"error": "No tokenizer file found"}), 404
+
 def graceful_shutdown(signum, frame):
     print(f"\n🛑 Received signal {signum}. Shutting down gracefully...")
     if trainer.is_training:
