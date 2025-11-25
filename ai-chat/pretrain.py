@@ -10,6 +10,15 @@ import os
 
 print("🔥 GPT PRE-TRAINING (Transformer + BPE)")
 
+# Auto-download corpus if needed
+corpus_files = [f for f in os.listdir('extra_corpus') if f.endswith('.txt')]
+if len(corpus_files) < 10:  # Should have ~14 files after download
+    print("📥 Corpus files missing. Downloading...")
+    import subprocess
+    subprocess.run(['python', 'download_corpus.py'], check=True)
+else:
+    print(f"✅ Found {len(corpus_files)} corpus files")
+
 # Load corpus
 corpus = get_training_corpus()
 shakespeare = get_shakespeare_corpus()  
