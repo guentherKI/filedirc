@@ -1,6 +1,9 @@
 // LSTM Chat Frontend - Connects to Python LSTM Server
 
-const API_URL = 'http://localhost:5000';
+// Auto-detect: use same domain in production, localhost in development
+const API_URL = window.location.hostname === 'localhost'
+    ? 'http://localhost:5000'
+    : window.location.origin;
 let isGenerating = false;
 
 async function sendMessage(message) {
